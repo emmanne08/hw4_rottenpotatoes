@@ -1,5 +1,15 @@
 class MoviesController < ApplicationController
-
+  
+  def find_similar_movies
+    id = params[:id]
+    
+    case @movies = Movie.find_movies_with_same_director(id)
+    when []
+      flash[:warning] = "'#{Movie.find_by_id(id).title}' has no director info"
+      redirect_to movies_path
+    end
+  end
+  
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -63,5 +73,4 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
-
 end
